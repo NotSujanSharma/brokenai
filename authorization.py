@@ -2,14 +2,13 @@ import jwt
 import datetime
 
 def generate_jwt(user_id):
-    # Your "secret" key that will be used to encode the JWT
-    secret_key = "meisujansharmathegreat"
+    secret_key = "not a good secret key"
 
     # Payload data you want to encode within the JWT
     payload = {
-        "user_id": user_id,  # Example user ID
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1),  # Expiration time
-        "iat": datetime.datetime.utcnow(),  # Issued at
+        "user_id": user_id,
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1),
+        "iat": datetime.datetime.utcnow(), 
     }
 
     # Generate the JWT
@@ -17,10 +16,11 @@ def generate_jwt(user_id):
 
     # Since jwt.encode() returns a byte string, decode it to get the string representation
     #token_str = token.encode('utf-8')
+
     return token
 
 def decode_jwt(token):
-    secret_key = "meisujansharmathegreat"
+    secret_key = "not a good secret key"
     try:
         decoded_token = jwt.decode(token, secret_key, algorithms=["HS256"])
         return decoded_token
@@ -32,7 +32,7 @@ def authorized(token):
     if(token is None):
         return False
     
-    #Veryfy the signature of the JWT
+    #Verify the signature of the JWT
     decoded_token = decode_jwt(token)
     if(decoded_token is not None):
         return True

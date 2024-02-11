@@ -1,9 +1,6 @@
 {%extends "base.html"%}
 {%block content%}
-{%if status%}
-{{status}}
-{%endif%}
-<form method="post" action="login">
+<form method="post" action="signup">
     <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" class="form-control" id="username" name="username" required>
@@ -12,6 +9,6 @@
         <label for="password">Password:</label>
         <input type="password" class="form-control" id="password" name="password" required>
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
+    <button type="submit" class="btn btn-primary">signup</button>
 </form>
 {%endblock%}

@@ -1,13 +1,6 @@
-
-{%extends "base.html"%}
-{%block content%}
-
-
 <a href="{{url_for('views.profile')}}">Profile</a>
 
 <a href="{{url_for('views.login')}}">login</a>
 <a href="{{url_for('views.signup')}}">signup</a>
 <a href="{{url_for('views.users')}}">users</a>
-
-{% endblock %}
-
+{% block content %}{% endblock %}

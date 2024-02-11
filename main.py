@@ -1,44 +1,23 @@
-from flask import Flask, render_template, request, redirect, url_for
-from authorization import authorized, generate_jwt
-from flask import make_response
+from flask import Flask
+from routing import views
+from models import db
+
 
 app = Flask(__name__)
 
-@app.route('/profile', methods=['GET'])  # Corrected line
-def profile():
-    # Store the authorization token from header in a variable
-    token = request.cookies.get('Authorization')    
-    if token:
-        if authorized(token) == True:
-            return render_template('profile.html')
+# Configuring Database
 
-    # Provide new authorization token in header
-    #temp_token = generate_jwt('nau')
-    response = make_response(redirect(url_for('login')))
-    #response.set_cookie('Authorization', temp_token)
-    return response
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///brokenai.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@192.168.2.12/brokenai'
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+# Initializing Database
+db.init_app(app)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if username == 'sujan' and password == 'password':
-            token = generate_jwt(username)
-            response = make_response(redirect(url_for('profile')))
-            response.set_cookie('Authorization', token)
-            return response
-    return render_template('login.html')
+app.app_context().push()
 
-@app.route('/logout', methods=['POST'])
-def logout():
-    response = make_response(redirect(url_for('home')))
-    response.set_cookie('Authorization', '', expires=0)
-    return response
+# Blueprint for routing
+app.register_blueprint(views, url_prefix='/')
+
 
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0")
