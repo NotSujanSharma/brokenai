@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, make_response
 from authorization import authorized, generate_jwt
-from models import db, Users
+from utils import add_user, get_all_users
 views = Blueprint('views',__name__)
 
 
@@ -45,15 +45,10 @@ def login():
 @views.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        
         username = request.form['username']
         password = request.form['password']
-        user= Users(username=username, password=password)
-        db.session.add(user)
-        db.session.commit()
-
-        
-        return redirect(url_for('views.login'))
+        if(add_user(username, password)):
+            return redirect(url_for('views.login'))
         
     return render_template('signup.html')
 
@@ -62,7 +57,7 @@ def signup():
 
 @views.route('/users', methods=['GET'])
 def users():
-    users = Users.query.all()
+    users = get_all_users()
     return render_template('users.html', users=users)
 
 #logout
