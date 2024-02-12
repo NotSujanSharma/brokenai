@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, make_response
-from authorization import authorized, generate_jwt
-from utils import add_user, get_all_users
+from authorization import generate_jwt
+from utils import validate_user, add_user, get_all_users, logged_in
+import datetime
 views = Blueprint('views',__name__)
 
 
@@ -9,20 +10,18 @@ views = Blueprint('views',__name__)
 @views.route('/profile', methods=['GET']) 
 def profile():
     token = request.cookies.get('Authorization')    
-    if token:
-        if authorized(token) == True:
-            return render_template('profile.html')
+    if (logged_in(token)):
+        return render_template('profile.html', logged_in=True)
 
     response = make_response(redirect(url_for('views.login')))
-    #temp_token = generate_jwt('nau')
-    #response.set_cookie('Authorization', temp_token)
     return response
 
 #main page
 
 @views.route('/')
 def home():
-    return render_template('index.html')
+    token = request.cookies.get('Authorization')
+    return render_template('index.html', logged_in=logged_in(token))
 
 
 #login page
@@ -32,7 +31,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if username == 'sujan' and password == 'password':
+
+        if validate_user(username,password) == True:
             token = generate_jwt(username)
             response = make_response(redirect(url_for('views.profile')))
             response.set_cookie('Authorization', token)
@@ -57,13 +57,18 @@ def signup():
 
 @views.route('/users', methods=['GET'])
 def users():
+    token = request.cookies.get('Authorization')
     users = get_all_users()
-    return render_template('users.html', users=users)
+    return render_template('users.html', users=users, logged_in=logged_in(token))
 
 #logout
 
-@views.route('/logout', methods=['POST'])
+@views.route('/logout', methods=['GET','POST'])
 def logout():
     response = make_response(redirect(url_for('views.home')))
-    response.set_cookie('Authorization', '', expires=0)
+    response.set_cookie('Authorization', '', expires=datetime.datetime.utcnow()+datetime.timedelta(days=5))
     return response
+
+@views.route('/user/<username>', methods=['GET'])
+def user(username):
+    return f"Hello {username}"
