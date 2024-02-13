@@ -1,14 +1,18 @@
 
-<a href="{{url_for('views.profile')}}">Profile</a>
-
-
-
-<a href="{{url_for('views.users')}}">users</a>
-{%if logged_in%}
-<a href="{{url_for('views.logout')}}">Logout</a>
-{%else%}
-<a href="{{url_for('views.login')}}">login</a>
-<a href="{{url_for('views.signup')}}">signup</a>
-{%endif%}
-<hr/>
-{% block content %}{% endblock %}
+<html>
+  <head><title>Brokenai</title>
+  </head>
+  <link rel="stylesheet" href="{{url_for('static','styles/style.css'}}">
+  <body>
+        <a href="{{url_for('views.profile')}}">Profile</a>
+        <a href="{{url_for('views.users')}}">Users</a>
+        {%if logged_in%}
+        <a href="{{url_for('views.logout')}}">Logout</a>
+        {%else%}
+        <a href="{{url_for('views.login')}}">Login</a>
+        <a href="{{url_for('views.signup')}}">Signup</a>
+        {%endif%}
+        <hr/>
+        {% block content %}{% endblock %}
+    </body>
+</html>
