@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-👋Hi, I am {{user.username}}<br/>
-You can mail me at {{user.email}}<br/>
 
-
+## 👋 Hi, I’m @{{user.username}}<br/>
+- 👀 I’m interested in Programming, Web Development and Offensive Security.<br />
+<!-- - 🌱 I’m currently enrolled in CPP at Seneca.<br /> -->
+- 💞️ I’m looking to collaborate on different new projects.<br />
+- 📫 How to reach me? Just e-mail me at {{user.email}}.<br />
+{%if user.company%}
+- 📎 I am associated with @{{user.company}}<br />
+{%endif%}
 <img
     src="https://github-readme-stats.vercel.app/api?username={{user.username}}&show_icons=true&cache_seconds=60&theme=radical"/>
 <img src="https://github-readme-stats.vercel.app/api/top-langs?username={{user.username}}&cache_seconds=60&theme=radical&langs_count=8&layout=compact"/>
