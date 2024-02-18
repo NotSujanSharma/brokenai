@@ -38,5 +38,12 @@ def authorized(token):
         return True
     else:
         return False
+        
+def get_username(token):
+    decoded_token = decode_jwt(token)
+    if(decoded_token is not None):
+        return decoded_token['user_id']
+    else:
+        return None
 
 

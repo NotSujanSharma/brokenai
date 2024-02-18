@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, make_response
-from authorization import generate_jwt
-from utils import validate_user, add_user, get_all_users, logged_in
+from authorization import generate_jwt, get_username
+from utils import validate_user, add_user, get_all_users, logged_in, get_user
 import datetime
 views = Blueprint('views',__name__)
 
@@ -11,7 +11,9 @@ views = Blueprint('views',__name__)
 def profile():
     token = request.cookies.get('Authorization')    
     if (logged_in(token)):
-        return render_template('profile.html', logged_in=True)
+        username = get_username(token)
+        user=get_user(username)
+        return render_template('profile.html', logged_in=True, user=user)
 
     response = make_response(redirect(url_for('views.login')))
     return response
