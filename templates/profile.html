@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-Hi, I am {{user.username}}
-<form method="post" action="logout">
-<button type="submit" class="btn btn-primary">logout</button>
-</form>
+👋Hi, I am {{user.username}}<br/>
+You can mail me at {{user.email}}<br/>
+
 
 <img
     src="https://github-readme-stats.vercel.app/api?username={{user.username}}&show_icons=true&cache_seconds=60&theme=radical"/>
 <img src="https://github-readme-stats.vercel.app/api/top-langs?username={{user.username}}&cache_seconds=60&theme=radical&langs_count=8&layout=compact"/>
+<form method="post" action="logout">
+    <button type="submit" class="btn btn-primary">logout</button>
+</form>
 {% endblock %}
