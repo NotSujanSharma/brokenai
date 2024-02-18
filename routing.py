@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, make_response
 from authorization import generate_jwt, get_username
-from utils import validate_user, add_user, get_all_users, logged_in, get_user
+from utils import validate_user, add_user, get_all_users, logged_in,get_user_details
 import datetime
 views = Blueprint('views',__name__)
 
@@ -12,7 +12,7 @@ def profile():
     token = request.cookies.get('Authorization')    
     if (logged_in(token)):
         username = get_username(token)
-        user=get_user(username)
+        user=get_user_details(username)
         return render_template('profile.html', logged_in=True, user=user)
 
     response = make_response(redirect(url_for('views.login')))
@@ -49,7 +49,8 @@ def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if(add_user(username, password)):
+        email= request.form['email']
+        if(add_user(username, password,email)):
             return redirect(url_for('views.login'))
         
     return render_template('signup.html')
